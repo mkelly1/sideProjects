@@ -36,6 +36,8 @@ class AnimalTracker:
     def get_animals(self):
         return list(self.animal_map.keys())
 
+    # Get an animal by its name as a String
+    # If the animal name is not found, return None
     def get_animal(self, subject):
         if subject in self.animal_map:
             return self.animal_map[subject]
@@ -51,11 +53,12 @@ files and the binary search tree is a structure optimizing searching in the file
 class AnimalData:
 
     def __init__(self, urgent=True):
-        """ Create a collection of file sets for processing and search. If FIFO (first in first out) is true (default), it will process files by time received starting with
-        the first received. If FIFO is false, it will process starting with the most recently received or LIFO (last in first out)."""
+        """ Create a collection of file sets for processing and search.
+        If urgent is true (default), it will look at most recent files first.
+        If urgent is false, it will look at files in order received."""
         self.urgent = urgent
         # All the unsorted files
-        self.raw = QueueStack(not urgent) #if not urgent, set is to fifo
+        self.raw = QueueStack(not urgent) #if not urgent, treat as FIFO/queue
         # All the sorted files
         self.sorted = DoubleLinkedList()
         # Cosntructed BST as files are sorted
@@ -84,11 +87,19 @@ class AnimalData:
         # sort all files in processed queue
         return
 
-# TODO docs
     def is_urgent(self):
+        '''
+        Check if the set of data is sent to "urgent", meaning newest files are
+        looked at first.
+        '''
         return self.urgent
-# TODO docs
+
     def set_urgent(self, urgent):
+        '''
+        If urgent, then newest files are processed first.
+        If there are already files in this set, the processing order will be
+        reversed.
+        '''
         if(self.urgent != urgent):
             self.urgent = urgent
             self.raw.invert_priority()
