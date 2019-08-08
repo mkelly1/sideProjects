@@ -1,6 +1,6 @@
 from datafile import DataFile
 from file_list import DoubleLinkedList
-from file_queue import Stack, Queue
+from file_queue import QueueStack
 
 """
 This Animal tracker will contain information about several animals. Given their
@@ -29,7 +29,7 @@ class AnimalTracker:
         # unprocessed list. Otherwise, create a new tuple
         if(animal not in self.animal_map):
             # use the provided queue parameter to decide priority or processing
-            self.animal_map[animal] = FileTuple(queue)
+            self.animal_map[animal] = AnimalData()
         files = self.animal_map[animal]
         files.add_new_file(file)
 
@@ -48,27 +48,47 @@ a binary search tree. The unprocessed member is a queue or a stack returned the
 next most important file to process. The processed list contains all sorted
 files and the binary search tree is a structure optimizing searching in the files.
 """
-class FileTuple:
+class AnimalData:
 
-    def __init__(self, fifo=True):
+    def __init__(self, urgent=True):
         """ Create a collection of file sets for processing and search. If FIFO (first in first out) is true (default), it will process files by time received starting with
         the first received. If FIFO is false, it will process starting with the most recently received or LIFO (last in first out)."""
-
+        self.urgent = urgent
         # All the unsorted files
-        self.unprocessed = Queue() if fifo else Stack()
+        self.raw = QueueStack(not urgent) #if not urgent, set is to fifo
         # All the sorted files
-        self.processed = DoubleLinkedList()
+        self.sorted = DoubleLinkedList()
         # Cosntructed BST as files are sorted
-        self.search_tree = None # None until files are processed
+        self.search = None # None until files are processed
 
     def add_new_file(self, file):
-        self.unprocessed.push(file)
+        self.raw.push(file)
 
-    def get_unprocessed(self):
-        return self.unprocessed
+    def get_raw(self):
+        return self.raw
 
-    def get_processed(self):
-        return self.processed
+    def get_sorted(self):
+        return self.sorted
 
-    def get_search_tree(self):
-        return self.search_tree
+    def get_search(self):
+        return self.search
+
+    def sort_next(self, batch=1):
+        # TODO
+        # Sort the next batch of files in priority order
+        # This will add them to the search tree
+        return
+
+    def sort_all(self):
+        # TODO
+        # sort all files in processed queue
+        return
+
+# TODO docs
+    def is_urgent(self):
+        return self.urgent
+# TODO docs
+    def set_urgent(self, urgent):
+        if(self.urgent != urgent):
+            self.urgent = urgent
+            self.raw.invert_priority()
