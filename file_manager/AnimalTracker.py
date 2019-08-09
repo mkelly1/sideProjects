@@ -44,10 +44,20 @@ class AnimalTracker:
         else:
             return None
 
+    def delete_animal(self):
+        return # TODO
+
+# Zip/unzip, compression, or serialization is a wishlist item if I get around to it
+    def zip_animal(self):
+        return # TODO: compress and zip all data related to the animal
+
+    def unzip_animal(self):
+        return # TODO: given a zipped set of animal data, unpack it into this structure
+
 """
 This is a set of three file tracking structure: a queue or stack, a list, and
-a binary search tree. The unprocessed member is a queue or a stack returned the
-next most important file to process. The processed list contains all sorted
+a binary search tree. The raw data is a queue or a stack returned the
+next most important file to process. The sorted list contains all sorted
 files and the binary search tree is a structure optimizing searching in the files.
 """
 class AnimalData:
@@ -65,15 +75,31 @@ class AnimalData:
         self.search = None # None until files are processed
 
     def add_new_file(self, file):
+        '''
+        Add a new file to the set of raw data for this animal.
+        '''
+        # TODO: avoid exposing this structure
         self.raw.push(file)
 
     def get_raw(self):
+        '''
+        Get the queue of all unsorted data for this animal
+        '''
+        # TODO: avoid exposing this structure
         return self.raw
 
     def get_sorted(self):
+        '''
+        Get the list of sorted data for this animal
+        '''
         return self.sorted
 
     def get_search(self):
+        '''
+        Get the search tree for this animal
+        '''
+        # TODO: ideally we don't expose this structure and instead have a set
+        # of methods that use the search tree
         return self.search
 
     def sort_next(self, batch=1):
